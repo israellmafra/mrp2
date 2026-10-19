@@ -1,0 +1,241 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>MRP Compras</title><script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{--bg:#f4f6f8;--fg:#1c2530;--card:#fff;--bd:#d5dbe2;--pri:#1d4ed8;--red:#c62828;--grn:#1b7f3b;--gray:#e5e7eb;--sal:#fbd5c8;--lb:#dbeafe;--gb:#d1fae5;--db:#1e3a8a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10151b;--fg:#e6ebf0;--card:#18202a;--bd:#2c3744;--pri:#6c9bff;--red:#ff7b7b;--grn:#4cd37e;--gray:#2b333d;--sal:#5a3a30;--lb:#1e3350;--gb:#14402b}}
+:root[data-theme=dark]{--bg:#10151b;--fg:#e6ebf0;--card:#18202a;--bd:#2c3744;--pri:#6c9bff;--red:#ff7b7b;--grn:#4cd37e;--gray:#2b333d;--sal:#5a3a30;--lb:#1e3350;--gb:#14402b}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:14px system-ui,Segoe UI,Arial,sans-serif}
+header{background:var(--card);border-bottom:1px solid var(--bd);padding:8px 12px;position:sticky;top:0;z-index:30}
+h1{font-size:17px;margin:0 0 6px}nav{display:flex;gap:4px;flex-wrap:wrap}main{padding:12px}
+button,select,input,textarea{font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:5px 9px}
+button{cursor:pointer}button.p,nav button.on{background:var(--pri);color:#fff;border-color:var(--pri)}button.d{color:var(--red)}
+.tb{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 8px;align-items:center}.sm{font-size:12px;opacity:.85;margin:4px 0}
+.kp{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}.kp div{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:6px 12px}.kp b{font-size:18px;display:block}
+.tw{overflow:auto;max-height:72vh;max-width:100%;border:1px solid var(--bd);background:var(--card)}
+table{border-collapse:separate;border-spacing:0;font-size:12.5px}th,td{border-bottom:1px solid var(--bd);border-right:1px solid var(--bd);padding:3px 6px;white-space:nowrap}
+thead th{position:sticky;top:0;background:var(--gray);z-index:5}
+.m td.f,.m th.f{position:sticky;background:var(--card);z-index:4;overflow:hidden;text-overflow:ellipsis}.m thead th.f{z-index:9;background:var(--gray)}
+.c0{left:0;min-width:92px;max-width:92px}.c1{left:92px;min-width:170px;max-width:170px}.c2{left:262px;min-width:46px;max-width:46px}.c3{left:308px;min-width:92px;max-width:92px}.c4{left:400px;min-width:84px;max-width:84px}.c5{left:484px;min-width:98px;max-width:98px}.c6{left:582px;min-width:130px;max-width:130px}.c7{left:712px;min-width:104px;max-width:104px}
+.m td.n{text-align:right;min-width:62px}.r0 td.n,.r0 .c7{background:var(--gray)}.r1 td.n,.r1 .c7{background:var(--sal)}.r2 td.n,.r2 .c7{background:var(--lb)}.r3 td.n,.r3 .c7{background:var(--gb)}.r4 td.n,.r4 .c7{background:var(--db);color:#fff}
+.neg{color:var(--red)!important;font-weight:700}.r4 .neg{color:#ffb4b4!important}.cov{color:var(--grn);font-weight:700}.sho{color:var(--red);font-weight:700}
+.bd{display:inline-block;font-size:10px;border:1px solid var(--red);color:var(--red);border-radius:4px;padding:0 3px;margin:1px}
+.ss{width:52px;padding:1px 3px}#ov{display:none;position:fixed;inset:0;background:#0008;z-index:99;align-items:center;justify-content:center}
+.box{background:var(--card);border-radius:10px;padding:14px;max-width:min(760px,94vw);max-height:88vh;overflow:auto;min-width:300px}.box textarea{width:100%;height:200px;box-sizing:border-box}
+.bt{display:flex;gap:6px;justify-content:flex-end;margin-top:10px}.fr{display:grid;grid-template-columns:130px 1fr;gap:6px;margin:4px 0;align-items:center}
+#toast{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:var(--grn);color:#fff;padding:8px 14px;border-radius:8px;z-index:120;display:none;max-width:90vw}#toast.er{background:var(--red)}
+.wr{background:#fff3cd;color:#5c4400;border:1px solid #e6c85c;border-radius:6px;padding:4px 8px;margin:4px 0;font-size:12.5px}.ok{color:var(--grn)}.q{width:64px;text-align:right}
+:root{--bg:#f3f1ec;--card:#fbfaf7;--bd:#d9d5cb;--fg:#15130f}
+html,body{height:100%}body{display:flex;flex-direction:column;font:13px/1.35 "Helvetica Neue",Arial,sans-serif;font-variant-numeric:tabular-nums}
+header{display:flex;align-items:center;gap:16px;padding:0 10px;height:30px;background:var(--fg);color:var(--bg);border:0;position:static}
+.lg{font:700 11px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.14em;white-space:nowrap}
+nav{gap:0;flex-wrap:nowrap;overflow-x:auto}nav button{border:0;border-radius:0;background:none;color:inherit;opacity:.6;padding:0 10px;height:30px;font-size:12px;white-space:nowrap}nav button.on{background:none;color:inherit;opacity:1;box-shadow:inset 0 -2px var(--bg)}
+main{flex:1;min-height:0;overflow:auto;padding:8px 10px}main.mrp{display:flex;flex-direction:column;padding:0;overflow:hidden}
+button,select,input{border-radius:2px;padding:2px 6px;font-size:12px}button{background:none}button.p{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.tb{gap:4px;margin:0 0 6px}main.mrp>.tb{padding:3px 8px;margin:0;border-bottom:1px solid var(--bd)}
+#mt{flex:1;min-height:0;display:flex;flex-direction:column}#mt .tw{flex:1;max-height:none;border:0}.tw{max-height:calc(100vh - 80px)}
+.kp{gap:14px;margin:0;padding:3px 8px;font-size:11.5px;border-bottom:1px solid var(--bd)}.kp div{border:0;padding:0;background:none}.kp b{font-size:12.5px;display:inline;margin-right:4px}
+#mt .wr{margin:0;border-radius:0;border-width:0 0 1px;padding:2px 8px;font-size:11.5px}#mt>p.sm{margin:0;padding:2px 8px;font-size:10.5px;opacity:.65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-top:1px solid var(--bd)}
+.m{font-size:11px;table-layout:fixed}.m th,.m td{padding:1px 4px}.m thead th:not(.f){width:58px}.m td.n{min-width:0}.m td.f,.m th.f{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:1px 3px;box-sizing:border-box}
+.m .c0{left:0;width:4vw}.m .c1{left:4vw;width:7.5vw}.m .c2{left:11.5vw;width:1.8vw}.m .c3{left:13.3vw;width:4vw}.m .c4{left:17.3vw;width:3.6vw}.m .c5{left:20.9vw;width:4.8vw}.m .c6{left:25.7vw;width:4.4vw}.m .c7{left:30.1vw;width:4.9vw}
+.m .f{min-width:0;max-width:none}.ss{width:100%;box-sizing:border-box;padding:0 2px;font-size:10px}.bd{font-size:9px;padding:0 2px}
+</style></head><body>
+<header><b class=lg>MRP·COMPRAS</b><nav id="nav"></nav></header>
+<main id="app"></main><div id="ov"></div><div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),R=x=>Math.round(x*1e6)/1e6,KEY='mrp_v1';
+const MES={jan:1,fev:2,mar:3,abr:4,mai:5,jun:6,jul:7,ago:8,set:9,out:10,nov:11,dez:12};
+const emptyS=()=>({bom:[],plan:{models:[],dates:[],q:{}},po:[],stock:[],sup:[],asn:[],cfg:{lt:30,ss:{}}});
+let S=emptyS();try{const j=localStorage.getItem(KEY);if(j)S=Object.assign(S,JSON.parse(j))}catch(e){}
+let st={tab:'mrp',view:'d',f:{q:'',model:'',sup:'',status:'',sort:false}},cur=null,lastView=null;
+const norm=s=>String(s==null?'':s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fnum=n=>Number(n).toLocaleString('pt-BR',{maximumFractionDigits:6}),fm=n=>'R$ '+Number(n).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fd=i=>i?i.split('-').reverse().join('/'):'',p2=n=>String(n).padStart(2,'0'),mkISO=(y,m,d)=>y+'-'+p2(m)+'-'+p2(d);
+const nid=()=>'AV-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+function pNum(s){s=String(s).replace(/R\$|\s/g,'');if(s===''||!/^-?[\d.,]+$/.test(s))return NaN;
+ if(s.includes(',')){if(s.indexOf(',')!==s.lastIndexOf(','))return NaN;s=s.replace(/\./g,'').replace(',','.')}
+ else if(s.includes('.')&&/^-?\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,'');
+ const n=Number(s);return isFinite(n)?n:NaN}
+function pDate(s){const m=String(s).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);if(!m)return null;const d=new Date(Date.UTC(+m[3],m[2]-1,+m[1]));return d.getUTCDate()==+m[1]&&d.getUTCMonth()==m[2]-1?mkISO(+m[3],+m[2],+m[1]):null}
+function addDays(i,n){const d=new Date(i+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10)}
+function todayISO(){const d=new Date();return mkISO(d.getFullYear(),d.getMonth()+1,d.getDate())}
+function msg(t,er){const e=$('#toast');e.textContent=t;e.className=er?'er':'';e.style.display='block';clearTimeout(msg.t);msg.t=setTimeout(()=>e.style.display='none',er?7000:4500)}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){msg('Falha ao salvar no armazenamento do navegador: '+e.message,1)}render()}
+function show(h){$('#ov').innerHTML='<div class=box>'+h+'</div>';$('#ov').style.display='flex'}const hide=()=>$('#ov').style.display='none';
+function ask(t,ok){return new Promise(r=>{show(`<p>${t}</p><div class=bt><button id=n>Cancelar</button><button class=p id=y>${ok||'Confirmar'}</button></div>`);$('#n').onclick=()=>{hide();r(0)};$('#y').onclick=()=>{hide();r(1)}})}
+/* ===== ambientes ===== */
+const E={
+bom:{t:'BOM',k:r=>r.cod+'|'+r.model,f:[{k:'cod',l:'Código',h:['codigo'],req:1},{k:'desc',l:'Descr. Português',h:['descr. portugues','descricao']},{k:'qtd',l:'QTD.',h:['qtd.','qtd'],req:1,n:1},{k:'orig',l:'Origem',h:['origem']},{k:'un',l:'Unidade de Medida',h:['unidade de medida','unidade']},{k:'kit',l:'Tipo de Kit (informativo)',h:['tipo de kit']},{k:'model',l:'MODEL',h:['model','modelo'],req:1}]},
+po:{t:'Pedidos de compra',k:r=>r.num+'|'+r.mat,f:[{k:'emis',l:'Data Emissao',h:['data emissao'],req:1,d:1},{k:'num',l:'Numero',h:['numero'],req:1},{k:'mat',l:'MATERIAL',h:['material'],req:1},{k:'desc',l:'Descricao',h:['descricao']},{k:'qtd',l:'Quantidade',h:['quantidade'],n:1},{k:'ent',l:'Qtd.Entregue',h:['qtd.entregue'],n:1},{k:'aberto',l:'Em aberto',h:['em aberto'],req:1,n:1},{k:'un',l:'Unidade',h:['unidade']},{k:'prc',l:'Prc Unitario',h:['prc unitario'],n:1},{k:'tot',l:'Vlr.Total',h:['vlr.total'],n:1},{k:'fn',l:'Desc. Fornec',h:['desc. fornec']},{k:'forn',l:'Fornecedor (código)',h:['fornecedor'],req:1}],
+ ex:{h:['Entrega prevista','Prazo usado','Situação'],f:r=>{const bm=S.bom.some(b=>b.cod===r.mat);if(!r.emis)return['','',''];const l=ltOf(r.forn),due=addDays(r.emis,l.v);return[fd(due),l.v+'d ('+l.src+')',!bm?'<span class=bd>fora da BOM</span>':r.aberto>0?(due<todayISO()?'<span class=bd>Pedido atrasado</span>':'a receber'):'sem saldo (ignorado)']}},
+ note:()=>{const n=S.po.filter(p=>!S.bom.some(b=>b.cod===p.mat)).length;return n?`<span class=wr>${n} linha(s) de pedido com material fora da BOM (salvas, não entram no MRP)</span>`:''}},
+stock:{t:'Estoque',k:r=>r.mat,f:[{k:'mat',l:'Material',h:['rotulos de linha','material'],req:1},{k:'desc',l:'Descrição',h:['linha','descricao']},{k:'qty',l:'Estoque',h:['soma de quantidade','quantidade'],req:1,n:1}],
+ note:()=>{const n=new Set(S.bom.map(b=>b.cod));S.stock.forEach(s=>n.delete(s.mat));return n.size?`<span class=wr>${n.size} material(is) da BOM sem registro de estoque: estoque inicial = 0</span>`:''}},
+asn:{t:'Avisos de embarque',k:r=>[r.mat,r.date,r.forn,r.ref].join('|'),f:[{k:'mat',l:'Material',h:['material'],req:1},{k:'qty',l:'Quantidade',h:['quantidade'],req:1,n:1},{k:'date',l:'Data prevista de chegada',h:['data prevista de chegada','data prevista'],req:1,d:1},{k:'forn',l:'Fornecedor',h:['fornecedor']},{k:'ref',l:'Pedido de referência',h:['pedido de referencia','pedido']},{k:'obs',l:'Observação',h:['observacao']}],
+ ex:{h:['ID','Situação'],f:r=>{const H=S.plan.dates;return[esc(r.id),!S.bom.some(b=>b.cod===r.mat)?'<span class=bd>fora da BOM</span>':!H.includes(r.date)?'<span class=bd>fora do horizonte</span>':'no MRP (S/N)']}}}};
+function mk(env,get){const r={},er=[];for(const f of E[env].f){const v=String(get(f)==null?'':get(f)).trim();
+ if(v===''){if(f.req)er.push(f.l+' obrigatório');r[f.k]=f.n?0:'';continue}
+ if(f.n){const n=pNum(v);if(isNaN(n))er.push(f.l+' numérico inválido: "'+v+'"');else if(n<0)er.push(f.l+' não pode ser negativo');else r[f.k]=n}
+ else if(f.d){const d=pDate(v);if(!d)er.push(f.l+' data inválida: "'+v+'" (use dd/mm/aaaa)');else r[f.k]=d}else r[f.k]=v}
+ return{r,er}}
+function parseTab(env,text){const L=text.replace(/\r/g,'').split('\n'),h=(L[0]||'').split('\t').map(norm),idx={},err=[],valid=[],inv=[],ign=[],w=[];
+ for(const f of E[env].f){const i=h.findIndex(x=>f.h.includes(x));if(i<0&&f.req)err.push('Cabeçalho obrigatório ausente: "'+f.l+'" (aceitos: '+f.h.join(', ')+')');idx[f.k]=i}
+ if(!err.length)L.slice(1).forEach((ln,i)=>{const c=ln.split('\t');if(c.every(x=>!x.trim())){ign.push('linha vazia');return}
+  if(/^total( geral)?$/.test(norm(c[0]))){ign.push('linha de total');return}
+  const{r,er}=mk(env,f=>idx[f.k]>=0?c[idx[f.k]]:'');if(er.length)inv.push({n:i+2,t:c.join(' | ').slice(0,90),e:er.join('; ')});else valid.push(r)});
+ const km=new Map();valid.forEach(r=>{const k=E[env].k(r);if(km.has(k)){w.push(env==='stock'?`Material duplicado "${k}": quantidades consolidadas (somadas)`:`Chave duplicada "${k}" no arquivo: prevalece a última linha`);if(env==='stock'){km.get(k).qty=R(km.get(k).qty+r.qty);return}}km.set(k,r)});
+ return{valid:[...km.values()],inv,ign,w,err}}
+function parsePlan(text,year){const L=text.replace(/\r/g,'').split('\n'),h=(L[0]||'').split('\t').map(x=>x.trim()),err=[],w=[],inv=[],ign=[],cols=[],seen=new Set(),valid=[],models=[];
+ if(norm(h[0])!=='modelo')err.push('A primeira coluna deve se chamar "Modelo".');
+ let y=year,pm=0;h.slice(1).forEach((x,i)=>{if(!x)return;const m=norm(x).match(/^(\d{1,2})\s*\/\s*([a-z]{3})\.?$/),mo=m&&MES[m[2]];if(!mo){err.push('Coluna "'+x+'" não é uma data dd/mês (ex.: 24/jul)');return}
+  if(mo<pm)y++;pm=mo;if(!pDate(+m[1]+'/'+mo+'/'+y)){err.push('Data impossível: '+x+'/'+y);return}const iso=mkISO(y,mo,+m[1]);
+  if(seen.has(iso)){w.push('Data repetida ignorada: '+x);return}seen.add(iso);cols.push({i:i+1,iso})});
+ if(!cols.length&&!err.length)err.push('Nenhuma coluna de data encontrada.');
+ if(!err.length)L.slice(1).forEach((ln,k)=>{const c=ln.split('\t');if(c.every(x=>!x.trim())){ign.push('linha vazia');return}const m=c[0].trim(),rr=[],er=[];
+  if(!m)er.push('Modelo vazio');cols.forEach(o=>{const v=(c[o.i]||'').trim(),n=v===''?0:pNum(v);if(isNaN(n)||n<0)er.push(`${fd(o.iso)}: valor inválido "${v}"`);else rr.push({model:m,date:o.iso,qty:n})});
+  if(er.length)inv.push({n:k+2,t:c.join(' | ').slice(0,90),e:er.join('; ')});else{if(models.includes(m))w.push('Modelo repetido: '+m);else models.push(m);valid.push(...rr)}});
+ return{valid,inv,ign,w,err,models,dates:cols.map(c=>c.iso)}}
+/* ===== importação ===== */
+function pasteDlg(env){show(`<h3>Colar dados — ${env==='plan'?'Plano de produção':E[env].t}</h3><p class=sm>Cole o texto copiado do Excel (TSV, com cabeçalho na 1ª linha).</p><textarea id=tx></textarea><div class=bt><button onclick=hide()>Cancelar</button><button class=p onclick="imp('${env}',$('#tx').value)">Interpretar</button></div>`)}
+function imp(env,text,year){year=year||new Date().getFullYear();const p=env==='plan'?parsePlan(text,year):parseTab(env,text);cur={env,p,text,year};
+ const bad=p.inv.length?`<table><tr><th>Linha</th><th>Conteúdo</th><th>Motivo</th></tr>${p.inv.slice(0,50).map(x=>`<tr><td>${x.n}</td><td>${esc(x.t)}</td><td class=neg>${esc(x.e)}</td></tr>`).join('')}</table>`+(p.inv.length>50?'<p class=sm>… e mais '+(p.inv.length-50)+'</p>':''):'';
+ const n=env==='plan'?p.models.length+' modelo(s), '+p.dates.length+' data(s)':p.valid.length+' linha(s) válida(s)';
+ show(`<h3>Prévia da importação</h3>${env==='plan'?`<div class=tb>Ano inicial: <input type=number id=yr value=${year} style="width:90px" onchange="imp('plan',cur.text,+this.value)"><span class=sm>(virada dez→jan incrementa o ano)</span></div>`:''}
+ ${p.err.map(e=>`<div class=wr style="background:#fde0e0;color:#7a1010">${esc(e)}</div>`).join('')}
+ <p><b class=ok>${n}</b> · <b class=neg>${p.inv.length} inválida(s)</b> (não serão salvas) · ${p.ign.length} ignorada(s)${p.ign.length?' ('+[...new Set(p.ign)].join(', ')+')':''}</p>${p.w.map(e=>`<div class=wr>${esc(e)}</div>`).join('')}${bad}
+ ${p.err.length?'':`<p><label><input type=radio name=md value=m checked> MESCLAR (atualiza pela chave, insere novos)</label><br><label><input type=radio name=md value=r> SUBSTITUIR tudo (apaga os registros atuais)</label></p>`}
+ <div class=bt><button onclick=hide()>Cancelar</button><button class=p ${p.err.length||!p.valid.length?'disabled':''} onclick=applyImp()>Confirmar importação</button></div>`)}
+function applyImp(){const{env,p}=cur,rep=document.querySelector('input[name=md]:checked').value==='r';
+ const go=()=>{let a=0,u=0;
+  if(env==='plan'){const P=rep?{models:[],dates:[],q:{}}:S.plan;p.models.forEach(m=>{if(!P.models.includes(m))P.models.push(m)});p.dates.forEach(d=>{if(!P.dates.includes(d))P.dates.push(d)});p.valid.forEach(r=>P.q[r.model+'|'+r.date]=r.qty);P.dates.sort();S.plan=P;a=p.valid.length}
+  else{const rec=p.valid.map(r=>env==='asn'?{id:nid(),...r}:r);if(rep){S[env]=rec;a=rec.length}else rec.forEach(r=>{const k=E[env].k(r),i=S[env].findIndex(x=>E[env].k(x)===k);if(i>=0){S[env][i]={...S[env][i],...r};u++}else{S[env].push(r);a++}})}
+  hide();save();msg(`Importação concluída: ${a} inserido(s), ${u} atualizado(s), ${p.inv.length} inválido(s) não salvo(s), ${p.ign.length} ignorado(s). MRP recalculado.`)};
+ if(rep)ask('SUBSTITUIR apagará todos os registros atuais deste ambiente e o MRP será recalculado. Confirmar?','Substituir').then(y=>y&&go());else go()}
+/* ===== CRUD genérico ===== */
+function cell(f,v){return f.d?fd(v):f.n?(f.k==='prc'||f.k==='tot'?fm(v||0):fnum(v||0)):esc(v)}
+function envView(env){const e=E[env],A=S[env];
+ return `<div class=tb><button class=p onclick="pasteDlg('${env}')">Colar do Excel (TSV)</button><button onclick="openForm('${env}')">+ Adicionar</button><button class=d onclick="delSel('${env}')">Excluir selecionados</button><button class=d onclick="clr('${env}')">Limpar tudo</button><b>${A.length} registro(s)</b></div>${e.note?e.note():''}${env==='bom'?'<p class=sm>QTD. = quantidade do material por 1 motocicleta do MODEL. Tipo de Kit é só informativo.</p>':''}
+ <div class=tw><table><thead><tr><th></th>${e.f.map(f=>`<th>${f.l}</th>`).join('')}${e.ex?e.ex.h.map(x=>`<th>${x}</th>`).join(''):''}<th></th></tr></thead><tbody>${A.slice(0,500).map((r,i)=>`<tr><td><input type=checkbox class=sel data-i=${i}></td>${e.f.map(f=>`<td>${cell(f,r[f.k])}</td>`).join('')}${e.ex?e.ex.f(r).map(x=>`<td>${x}</td>`).join(''):''}<td><button onclick="openForm('${env}',${i})">Editar</button> <button class=d onclick="del('${env}',${i})">Excluir</button></td></tr>`).join('')}</tbody></table></div>${A.length>500?'<p class=sm>Exibindo 500 primeiros registros.</p>':''}`}
+function openForm(env,i){const e=E[env],r=i==null?{}:S[env][i];show(`<h3>${i==null?'Adicionar':'Editar'} — ${e.t}</h3>${e.f.map(f=>`<div class=fr><label>${f.l}${f.req?' *':''}</label><input id=f_${f.k} value="${esc(r[f.k]==null?'':f.d?fd(r[f.k]):f.n?String(r[f.k]).replace('.',','):r[f.k])}" placeholder="${f.d?'dd/mm/aaaa':''}"></div>`).join('')}<div id=fe class=neg></div><div class=bt><button onclick=hide()>Cancelar</button><button class=p onclick="saveForm('${env}',${i==null?-1:i})">Salvar</button></div>`)}
+function saveForm(env,i){const{r,er}=mk(env,f=>$('#f_'+f.k).value);const k=E[env].k(r);
+ if(!er.length&&S[env].some((x,j)=>j!==i&&E[env].k(x)===k))er.push('Já existe registro com a mesma chave ('+k+')');
+ if(er.length){$('#fe').innerHTML=er.map(esc).join('<br>');return}
+ if(i<0)S[env].push(env==='asn'?{id:nid(),...r}:r);else S[env][i]={...S[env][i],...r};hide();save();msg('Registro salvo. MRP recalculado.')}
+const eff='O MRP será recalculado imediatamente sem estes dados.';
+function del(env,i){ask('Excluir esta linha? '+eff,'Excluir').then(y=>{if(y){S[env].splice(i,1);save();msg('1 registro excluído.')}})}
+function delSel(env){const ix=[...document.querySelectorAll('.sel:checked')].map(x=>+x.dataset.i);if(!ix.length)return msg('Selecione linhas.',1);ask(`Excluir ${ix.length} linha(s)? ${eff}`,'Excluir').then(y=>{if(y){S[env]=S[env].filter((_,j)=>!ix.includes(j));save();msg(ix.length+' registro(s) excluído(s).')}})}
+function clr(env){ask(`Limpar TODOS os registros de ${E[env].t}? ${eff}`,'Limpar tudo').then(y=>{if(y){S[env]=[];save();msg('Ambiente limpo.')}})}
+/* ===== plano ===== */
+function planView(){const P=S.plan;return `<div class=tb><button class=p onclick="pasteDlg('plan')">Colar do Excel (TSV)</button><input id=nm placeholder="Novo modelo"><button onclick=addM()>+ Modelo</button><input id=nd type=date><button onclick=addD()>+ Data</button><button class=d onclick=clrPlan()>Limpar tudo</button></div>
+ <p class=sm>Célula vazia é tratada como 0. Edite quantidades, corrija data/ano da coluna ou exclua modelos/datas.</p>${calc().noBom.length?`<div class=wr>Modelos sem itens de BOM (não geram demanda): ${calc().noBom.map(esc).join(', ')}</div>`:''}
+ <div class=tw><table><thead><tr><th>Modelo</th>${P.dates.map(d=>`<th><input type=date value="${d}" onchange="setD('${d}',this.value)"><button class=d onclick="delD('${d}')">×</button></th>`).join('')}</tr></thead><tbody>${P.models.map((m,mi)=>`<tr><td>${esc(m)} <button class=d onclick="delM(${mi})">×</button></td>${P.dates.map(d=>`<td><input class=q value="${P.q[m+'|'+d]!=null?fnum(P.q[m+'|'+d]):''}" placeholder=0 onchange="setQ(${mi},'${d}',this.value)"></td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
+function setQ(mi,d,v){const k=S.plan.models[mi]+'|'+d;v=v.trim();if(v==='')delete S.plan.q[k];else{const n=pNum(v);if(isNaN(n)||n<0){msg('Quantidade inválida: "'+v+'"',1);return render()}S.plan.q[k]=n}save()}
+function addM(){const m=$('#nm').value.trim();if(!m)return;if(S.plan.models.includes(m))return msg('Modelo já existe.',1);S.plan.models.push(m);save()}
+function addD(){const d=$('#nd').value;if(!d)return msg('Escolha uma data.',1);if(S.plan.dates.includes(d))return msg('Data já existe no plano.',1);S.plan.dates.push(d);S.plan.dates.sort();save()}
+function setD(o,n){if(!n)return render();if(S.plan.dates.includes(n))return msg('Data duplicada no plano.',1),render();const q={};for(const k in S.plan.q){const[m,d]=k.split('|');q[d===o?m+'|'+n:k]=S.plan.q[k]}S.plan.q=q;S.plan.dates=S.plan.dates.map(d=>d===o?n:d).sort();save()}
+function delD(d){ask(`Excluir a data ${fd(d)}? ${eff}`).then(y=>{if(y){S.plan.dates=S.plan.dates.filter(x=>x!==d);for(const k in S.plan.q)if(k.endsWith('|'+d))delete S.plan.q[k];save()}})}
+function delM(i){const m=S.plan.models[i];ask(`Excluir o modelo ${esc(m)}? ${eff}`).then(y=>{if(y){S.plan.models.splice(i,1);for(const k in S.plan.q)if(k.startsWith(m+'|'))delete S.plan.q[k];save()}})}
+function clrPlan(){ask('Limpar todo o plano de produção? '+eff).then(y=>{if(y){S.plan={models:[],dates:[],q:{}};save()}})}
+/* ===== leadtime ===== */
+function ltOf(c){const s=S.sup.find(x=>x.cod===c);return s&&s.lt!=null?{v:s.lt,src:'leadtime do fornecedor'}:{v:S.cfg.lt,src:'padrão global'}}
+function supList(){const bm=new Set(S.bom.map(b=>b.cod)),m=new Map();S.po.forEach(p=>{if(bm.has(p.mat)){const x=m.get(p.forn)||{cod:p.forn,nome:p.fn,n:0,auto:1};x.n++;m.set(p.forn,x)}});S.sup.forEach(s=>{const x=m.get(s.cod)||{cod:s.cod,nome:s.nome,n:0};x.nome=x.nome||s.nome;x.man=s.m;m.set(s.cod,x)});return[...m.values()]}
+function ltView(){return `<div class=tb>Leadtime padrão global (dias corridos): <input type=number min=0 value=${S.cfg.lt} style="width:80px" onchange="setGL(this.value)"> <button onclick=supForm()>+ Fornecedor manual</button></div><p class=sm>Entrega = Data Emissao + leadtime (dias corridos). Fornecedores automáticos: vinculados por pedidos a materiais da BOM.</p>
+ <div class=tw><table><thead><tr><th>Código</th><th>Fornecedor</th><th>Pedidos (BOM)</th><th>Leadtime próprio</th><th>Prazo efetivo</th><th></th></tr></thead><tbody>${supList().map(s=>{const l=ltOf(s.cod),o=S.sup.find(x=>x.cod===s.cod);return `<tr><td>${esc(s.cod)}</td><td>${esc(s.nome)}</td><td>${s.n}</td><td><input style="width:70px" value="${o&&o.lt!=null?o.lt:''}" placeholder="padrão" onchange="setLT('${esc(s.cod)}',this.value)"></td><td>${l.v}d <small>(${l.src})</small></td><td><button onclick="rmLT('${esc(s.cod)}')">Remover prazo próprio</button>${s.man&&!s.auto?` <button class=d onclick="delSup('${esc(s.cod)}')">Excluir</button>`:''}</td></tr>`}).join('')}</tbody></table></div>`}
+function setGL(v){const n=pNum(v);if(isNaN(n)||n<0)return msg('Leadtime inválido',1),render();S.cfg.lt=n;save()}
+function setLT(c,v){v=v.trim();if(v==='')return rmLT(c);const n=pNum(v);if(isNaN(n)||n<0)return msg('Leadtime inválido',1),render();let s=S.sup.find(x=>x.cod===c);if(!s){const x=supList().find(y=>y.cod===c);s={cod:c,nome:x?x.nome:''};S.sup.push(s)}s.lt=n;save()}
+function rmLT(c){const s=S.sup.find(x=>x.cod===c);if(s){s.lt=null;if(!s.m)S.sup=S.sup.filter(x=>x!==s)}save();msg('Passou a valer o padrão global.')}
+function delSup(c){ask('Excluir fornecedor manual? Pedidos não são afetados.').then(y=>{if(y){S.sup=S.sup.filter(x=>x.cod!==c);save()}})}
+function supForm(){show(`<h3>Fornecedor manual</h3><div class=fr><label>Código *</label><input id=sc></div><div class=fr><label>Nome</label><input id=sn></div><div class=fr><label>Leadtime (opcional)</label><input id=sl></div><div class=bt><button onclick=hide()>Cancelar</button><button class=p onclick=supSave()>Salvar</button></div>`)}
+function supSave(){const c=$('#sc').value.trim(),l=$('#sl').value.trim(),n=l===''?null:pNum(l);if(!c||(l!==''&&(isNaN(n)||n<0)))return msg('Código obrigatório / leadtime inválido',1);const o=S.sup.find(x=>x.cod===c);if(o){o.nome=$('#sn').value||o.nome;o.lt=n;o.m=1}else S.sup.push({cod:c,nome:$('#sn').value.trim(),lt:n,m:1});hide();save()}
+/* ===== cálculo MRP ===== */
+function calc(o={}){const H=[...S.plan.dates].sort(),today=o.today||todayISO(),mf=o.model||'',X={H,today,rows:[],lateN:0,poOff:0,asnOff:0,asnOut:0,noBom:[]};
+ const bm=new Map();S.bom.forEach(b=>{if(!bm.has(b.cod))bm.set(b.cod,b)});
+ X.poOff=S.po.filter(p=>!bm.has(p.mat)).length;X.asnOff=S.asn.filter(a=>!bm.has(a.mat)).length;X.asnOut=S.asn.filter(a=>bm.has(a.mat)&&!H.includes(a.date)).length;
+ const bms=new Set(S.bom.map(b=>b.model));X.noBom=S.plan.models.filter(m=>!bms.has(m));if(!H.length)return X;
+ const stk={};S.stock.forEach(s=>stk[s.mat]=s.qty);const dem={},asn={},po={},sup={};
+ S.bom.forEach(b=>{if(mf&&b.model!==mf)return;H.forEach(t=>{const n=+S.plan.q[b.model+'|'+t]||0;if(n>0){const k=b.cod+'|'+t;(dem[k]=dem[k]||[]).push({m:b.model,q:b.qtd,n})}})});
+ S.asn.forEach(a=>{if(bm.has(a.mat)&&H.includes(a.date)){const k=a.mat+'|'+a.date;(asn[k]=asn[k]||[]).push(a)}});
+ S.po.forEach(p=>{if(!(p.aberto>0)||!bm.has(p.mat))return;const l=ltOf(p.forn),due=addDays(p.emis,l.v),late=due<today,t=late?H[0]:due,it={p,l,due,late};(sup[p.mat]=sup[p.mat]||[]).push(it);if(late)X.lateN++;if(H.includes(t)){const k=p.mat+'|'+t;(po[k]=po[k]||[]).push(it)}});
+ for(const[cod,b]of bm){if(mf&&!S.bom.some(x=>x.cod===cod&&x.model===mf))continue;
+  const s0=stk[cod]||0,ss=+S.cfg.ss[cod]||0,lim=ss>0?ss:0;let sn=s0,pb=s0,shrt=null,poNeg=null;const r={cod,desc:b.desc,un:b.un,s0,ss,d:[],a:[],p:[],bs:[],bp:[],D:[],A:[],P:[],sup:sup[cod]||[]};
+  H.forEach(t=>{const dd=dem[cod+'|'+t]||[],aa=asn[cod+'|'+t]||[],pp=po[cod+'|'+t]||[],dv=R(dd.reduce((x,y)=>x+y.q*y.n,0)),av=R(aa.reduce((x,y)=>x+y.qty,0)),pv=R(pp.reduce((x,y)=>x+y.p.aberto,0));
+   sn=R(sn+av-dv);pb=R(pb+pv-dv);r.d.push(dv);r.a.push(av);r.p.push(pv);r.bs.push(sn);r.bp.push(pb);r.D.push(dd);r.A.push(aa);r.P.push(pp);
+   if(shrt===null&&sn<lim)shrt=t;if(poNeg===null&&pb<0)poNeg=t});
+  r.shrt=shrt;r.status=shrt?'SHORTAGE':'COVERED';r.poNeg=poNeg;r.rupt=r.bs.some(x=>x<0);r.belowSS=ss>0&&r.bs.some(x=>x<ss);X.rows.push(r)}
+ return X}
+const wk=t=>{const d=new Date(t+'T00:00:00Z');d.setUTCDate(d.getUTCDate()-(d.getUTCDay()+6)%7);return d.toISOString().slice(0,10)};
+function groups(H,v){const g=[];H.forEach((t,i)=>{const k=v==='d'?t:v==='m'?t.slice(0,7):wk(t),l=g[g.length-1];if(l&&l.k===k)l.i.push(i);else g.push({k,i:[i]})});
+ g.forEach(x=>{const a=H[x.i[0]],b=H[x.i[x.i.length-1]];x.l=a===b?fd(a).slice(0,5):fd(a).slice(0,5)+'–'+fd(b).slice(0,5);x.full=fd(a)+(a===b?'':' a '+fd(b))});return g}
+/* ===== tela MRP ===== */
+function filt(c){const f=st.f,q=norm(f.q);let r=c.rows.filter(x=>(!q||norm(x.cod+' '+x.desc).includes(q))&&(!f.sup||x.sup.some(s=>s.p.forn===f.sup))&&(!f.status||x.status===f.status));
+ if(f.sort)r=[...r].sort((a,b)=>(a.shrt||'9')<(b.shrt||'9')?-1:(a.shrt||'9')>(b.shrt||'9')?1:0);return r}
+function mrpView(){const f=st.f,models=[...new Set([...S.plan.models,...S.bom.map(b=>b.model)])],sups=[...new Map(S.po.map(p=>[p.forn,p.fn])).entries()];
+ return `<div class=tb><input id=fq placeholder="Buscar material/descrição" value="${esc(f.q)}" oninput="st.f.q=this.value;drawMrp()">
+ <select onchange="st.f.model=this.value;drawMrp()"><option value="">Todos os modelos</option>${models.map(m=>`<option ${f.model===m?'selected':''}>${esc(m)}</option>`).join('')}</select>
+ <select onchange="st.f.sup=this.value;drawMrp()"><option value="">Todos os fornecedores</option>${sups.map(([c,n])=>`<option value="${esc(c)}" ${f.sup===c?'selected':''}>${esc(c)} - ${esc(n)}</option>`).join('')}</select>
+ <select onchange="st.f.status=this.value;drawMrp()"><option value="">Todos os status</option><option ${f.status==='SHORTAGE'?'selected':''}>SHORTAGE</option><option ${f.status==='COVERED'?'selected':''}>COVERED</option></select>
+ <label><input type=checkbox ${f.sort?'checked':''} onchange="st.f.sort=this.checked;drawMrp()"> Ordenar por SHRTG</label>
+ ${['d','w','m'].map(v=>`<button class="${st.view===v?'p':''}" onclick="st.view='${v}';render()">${{d:'Dias',w:'Semanas',m:'Meses'}[v]}</button>`).join('')}<button class=p onclick=expo()>↧ Exportar Excel (.xlsx)</button></div><div id=mt></div>`}
+const T=a=>a.map(esc).join('\n');
+function tipD(g,r){const L=[];let tot=0;g.i.forEach(i=>r.D[i].forEach(x=>{L.push(`${fd(S.plan.dates[0]&&H0()[i])} ${x.m}: ${fnum(x.q)} × ${fnum(x.n)} = ${fnum(R(x.q*x.n))}`);tot=R(tot+x.q*x.n)}));return L.length?T([...L,'Total: '+fnum(tot)]):''}
+const H0=()=>[...S.plan.dates].sort();
+function tipA(g,r){const L=[];g.i.forEach(i=>r.A[i].forEach(a=>L.push(`Aviso ${a.id} | ${a.mat} | ${fd(a.date)} | Forn: ${a.forn||'-'} | Qtd ${fnum(a.qty)} | Ref: ${a.ref||'-'} | Obs: ${a.obs||'-'}`)));return L.length?T([...L,'Total: '+fnum(g.i.reduce((s,i)=>R(s+r.a[i]),0))]):''}
+function tipP(g,r){const L=[];g.i.forEach(i=>r.P[i].forEach(x=>L.push(`Pedido ${x.p.num} | ${x.p.mat} | Forn ${x.p.forn} ${x.p.fn} | Emissão ${fd(x.p.emis)} | Prazo ${x.l.v}d (${x.l.src}) | Entrega calculada ${fd(x.due)} | Em aberto ${fnum(x.p.aberto)}${x.late?' | PEDIDO ATRASADO: alocado na 1ª data do horizonte':''}`)));return L.length?T([...L,'Total: '+fnum(g.i.reduce((s,i)=>R(s+r.p[i]),0))]):''}
+function drawMrp(){const c=calc({model:st.f.model}),H=c.H,w=[];
+ if(!S.bom.length||!H.length){$('#mt').innerHTML=`<div class=wr>${!S.bom.length?'Carregue a BOM. ':''}${!H.length?'Sem horizonte: carregue um plano de produção (aba Plano de produção).':''}</div>`;return}
+ const rows=filt(c),g=groups(H,st.view);lastView={c,rows,g};
+ if(st.f.model)w.push(`Filtro de modelo ativo: demanda calculada somente para ${esc(st.f.model)} (os dados cadastrados não mudam).`);
+ if(c.noBom.length)w.push('Modelos do plano sem itens de BOM: '+c.noBom.map(esc).join(', '));
+ const sum=`<div class=kp><div><b>${rows.length}</b>materiais no escopo</div><div><b class=neg>${rows.filter(r=>r.status==='SHORTAGE').length}</b>em SHORTAGE</div><div><b>${c.lateN}</b>pedidos atrasados</div><div><b>${c.poOff}</b>pedidos com material fora da BOM</div><div><b>${c.asnOff+c.asnOut}</b>avisos fora da BOM/horizonte</div></div>${w.map(x=>`<div class=wr>${x}</div>`).join('')}`;
+ const cs=(v,tip,cls)=>`<td class="n ${cls||''}${v<0?' neg':''}" title="${tip||''}">`;
+ const body=rows.map(r=>{const sums=k=>g.map(x=>R(x.i.reduce((s,i)=>s+r[k][i],0))),end=k=>g.map(x=>r[k][x.i[x.i.length-1]]);
+  const dS=sums('d'),aS=sums('a'),pS=sums('p'),bs=end('bs'),bp=end('bp'),fx=['cod','desc','un','stk','shrt','sta','sup'];
+  const sp=[...new Map(r.sup.map(s=>[s.p.forn,s.p.fn])).entries()].map(([c,n])=>esc(c+' '+n)).join('; ')||'sem pedido';
+  const fixed=[esc(r.cod),esc(r.desc),esc(r.un),`${fnum(r.s0)}<br><input class=ss value="${r.ss||''}" placeholder="SS" title="Estoque de segurança" onchange="setSS('${esc(r.cod)}',this.value)">`,r.shrt?fd(r.shrt):'—',`<span class="${r.status==='COVERED'?'cov':'sho'}">${r.status}</span><br>${r.rupt?'<span class=bd title="Ruptura projetada">RUP</span>':''}${r.belowSS?'<span class=bd title="Abaixo do estoque de segurança">&lt;SS</span>':''}${r.poNeg?'<span class=bd title="Saldo PO negativo">PO−</span>':''}${r.sup.some(s=>s.late)?'<span class=bd title="Pedido atrasado">ATR</span>':''}`,sp];
+  const L=['Total Demand','Ship Notification','Purchase Order','BALANCE S/N','BALANCE PO'];
+  const data=[g.map((x,j)=>cs(dS[j],tipD(x,r))+(dS[j]?fnum(dS[j]):'')+'</td>'),g.map((x,j)=>cs(aS[j],tipA(x,r))+(aS[j]?fnum(aS[j]):'')+'</td>'),g.map((x,j)=>cs(pS[j],tipP(x,r))+(x.i.some(i=>r.P[i].some(y=>y.late))?'⚠ ':'')+(pS[j]?fnum(pS[j]):'')+'</td>'),bs.map(v=>cs(v)+fnum(v)+'</td>'),bp.map(v=>cs(v)+fnum(v)+'</td>')];
+  return L.map((l,k)=>`<tr class=r${k}>${k?'':fixed.map((x,j)=>`<td class="f c${j}" rowspan=5 title="${String(x).replace(/<[^>]*>/g,' ')}">${x}</td>`).join('')}<td class="f c7">${l}</td>${data[k].join('')}</tr>`).join('')}).join('');
+ $('#mt').innerHTML=sum+`<div class=tw><table class=m style="width:calc(35vw + ${g.length*58}px)"><thead><tr>${['Material','Descrição','Un.','STOCK','SHRTG','STATUS','Fornecedor(es)','Linha'].map((x,j)=>`<th class="f c${j}">${x}</th>`).join('')}${g.map(x=>`<th title="${x.full}">${x.l}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table></div><p class=sm>⚠ = pedido atrasado alocado na 1ª data do horizonte. Passe o mouse nas células para ver a origem. Saldos: S/N = estoque + avisos − demanda; PO = estoque + pedidos − demanda (independentes). Em semanas/meses: fluxos somados e saldo ao fim do período.</p>`}
+function setSS(c,v){v=v.trim();if(v==='')delete S.cfg.ss[c];else{const n=pNum(v);if(isNaN(n)||n<0)return msg('Estoque de segurança inválido',1),render();S.cfg.ss[c]=n}save()}
+async function expo(){if(!lastView||!lastView.rows.length)return msg('Nada para exportar: carregue BOM e plano.',1);
+ try{if(!window.XLSX)throw new Error('biblioteca XLSX não carregou');const{rows,g,c}=lastView,A=[['Material','Descrição','Unidade','Estoque','Estoque segurança','SHRTG','Status','Fornecedores','Linha',...g.map(x=>x.full)]];
+  rows.forEach(r=>{const sm=k=>g.map(x=>R(x.i.reduce((s,i)=>s+r[k][i],0))),en=k=>g.map(x=>r[k][x.i[x.i.length-1]]),sp=[...new Set(r.sup.map(s=>s.p.forn+' '+s.p.fn))].join('; ')||'sem pedido',f=[r.cod,r.desc,r.un,r.s0,r.ss,r.shrt?fd(r.shrt):'',r.status,sp];
+   [['Total Demand',sm('d')],['Ship Notification',sm('a')],['Purchase Order',sm('p')],['BALANCE S/N',en('bs')],['BALANCE PO',en('bp')]].forEach(([l,v])=>A.push([...f,l,...v]))});
+  const ws=XLSX.utils.aoa_to_sheet(A);ws['!cols']=[{wch:14},{wch:34},{wch:8},{wch:10},{wch:10},{wch:11},{wch:10},{wch:30},{wch:18},...g.map(()=>({wch:13}))];ws['!autofilter']={ref:ws['!ref']};
+  const f=st.f,P=XLSX.utils.aoa_to_sheet([['Gerado em',fd(todayISO())],['Granularidade',{d:'Dias',w:'Semanas',m:'Meses'}[st.view]],['Filtro modelo',f.model||'todos'],['Filtro fornecedor',f.sup||'todos'],['Filtro status',f.status||'todos'],['Busca',f.q||''],['Ordenado por SHRTG',f.sort?'sim':'não'],['Materiais exportados',rows.length],['Pedidos atrasados',c.lateN],['Leadtime global (dias)',S.cfg.lt],['Obs.','Saldos de semanas/meses = saldo ao fim do período; fluxos somados.']]);P['!cols']=[{wch:24},{wch:50}];
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'MRP');XLSX.utils.book_append_sheet(wb,P,'Parâmetros');
+  const dl=window.claude&&await claude.use('downloads');if(!dl)throw new Error('salvamento indisponível nesta visualização');
+  await dl.save({filename:'mrp_'+todayISO()+'.xlsx',data:new Uint8Array(XLSX.write(wb,{bookType:'xlsx',type:'array'}))});msg('Excel exportado: '+rows.length+' materiais × '+g.length+' períodos.')}
+ catch(e){if(e&&e.code==='declined')return msg('Exportação cancelada.');msg('Falha na exportação: '+(e.message||e.code),1)}}
+function expoCsv(){if(!lastView||!lastView.rows.length)return msg('Nada para exportar: carregue BOM e plano.',1);const{rows,g}=lastView,N=n=>String(n).replace('.',','),Q=s=>'"'+String(s).replace(/"/g,'""')+'"';
+ const out=[['Material','Descrição','Unidade','Estoque','Estoque segurança','SHRTG','Status','Fornecedores','Linha',...g.map(x=>x.full)]];
+ rows.forEach(r=>{const sm=k=>g.map(x=>N(R(x.i.reduce((s,i)=>s+r[k][i],0)))),en=k=>g.map(x=>N(r[k][x.i[x.i.length-1]])),sp=[...new Set(r.sup.map(s=>s.p.forn+' '+s.p.fn))].join('; ')||'sem pedido',f=[r.cod,r.desc,r.un,N(r.s0),N(r.ss),r.shrt?fd(r.shrt):'',r.status,sp];
+  [['Total Demand',sm('d')],['Ship Notification',sm('a')],['Purchase Order',sm('p')],['BALANCE S/N',en('bs')],['BALANCE PO',en('bp')]].forEach(([l,v])=>out.push([...f,l,...v]))});
+ try{const csv='\ufeff'+out.map(l=>l.map(Q).join(';')).join('\r\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='mrp_'+todayISO()+'.csv';document.body.appendChild(a);a.click();a.remove();
+  try{navigator.clipboard.writeText(out.map(l=>l.join('\t')).join('\n'))}catch(e){}msg('Exportação gerada (CSV para Excel) e copiada também como TSV para colar na planilha.')}catch(e){msg('Falha na exportação: '+e.message,1)}}
+/* ===== testes ===== */
+function withS(f,fn){const o=S;S=Object.assign(emptyS(),f);try{return fn()}finally{S=o}}
+function tests(){const T=[],ok=(n,c)=>T.push([n,!!c]),b=(c,m,q)=>({cod:c,model:m,qtd:q,desc:'',un:'UN'}),D=['2030-01-01','2030-01-02','2030-01-03','2030-01-04','2030-01-05'];
+ let c=withS({bom:[b('M','X',1)],stock:[{mat:'M',qty:5867}],plan:{models:['X'],dates:D,q:{'X|2030-01-01':235,'X|2030-01-02':311,'X|2030-01-03':126}},asn:[{id:'a',mat:'M',qty:1000,date:D[3]},{id:'b',mat:'M',qty:380,date:D[4]}]},()=>calc());
+ ok('13.3 saldos S/N 5.632/5.321/5.195/6.195/6.575 ('+c.rows[0].bs.join('/')+')',c.rows[0].bs.join()==='5632,5321,5195,6195,6575');ok('Saldo PO independente (sem pedidos): 5632…5195,5195,5195',c.rows[0].bp.join()==='5632,5321,5195,5195,5195');
+ c=withS({bom:[b('M','N150',2),b('M','D160',1)],plan:{models:['N150','D160'],dates:[D[0]],q:{'N150|2030-01-01':77,'D160|2030-01-01':103}}},()=>calc());ok('13.4 demanda 2×77+1×103 = 257',c.rows[0].d[0]===257);
+ ok('13.5 22/10/2024 + 30 dias = 21/11/2024',addDays('2024-10-22',30)==='2024-11-21');ok('addDays vira o ano (2024-12-20+30=2025-01-19)',addDays('2024-12-20',30)==='2025-01-19');
+ const po={emis:'2024-10-22',num:'000004',mat:'M',aberto:10,forn:'F1',fn:'Forn'},h=['2024-11-01','2024-11-21','2024-12-01'],pl={models:['X'],dates:h,q:{}};
+ c=withS({bom:[b('M','X',1)],plan:pl,po:[po]},()=>calc({today:'2024-11-05'}));ok('Pedido com leadtime global cai em 21/11',c.rows[0].p.join()==='0,10,0'&&c.lateN===0);
+ c=withS({bom:[b('M','X',1)],plan:pl,po:[po],sup:[{cod:'F1',lt:10}]},()=>calc({today:'2024-10-30'}));ok('Leadtime próprio (10d) → 01/11',c.rows[0].p.join()==='10,0,0');
+ c=withS({bom:[b('M','X',1)],plan:pl,po:[po]},()=>calc({today:'2024-12-15'}));ok('Pedido atrasado só na 1ª data, 1×',c.rows[0].p.join()==='10,0,0'&&c.lateN===1&&c.rows[0].bp.join()==='10,10,10');
+ c=withS({bom:[b('M','X',1)],plan:{models:['X'],dates:[D[0]],q:{'X|2030-01-01':30}},stock:[{mat:'M',qty:100}],cfg:{lt:30,ss:{M:80}}},()=>calc());ok('Estoque de segurança: SHRTG na 1ª data, saldo bruto 70',c.rows[0].shrt===D[0]&&c.rows[0].status==='SHORTAGE'&&c.rows[0].bs[0]===70);
+ c=withS({bom:[b('M','X',1)],plan:{models:['X'],dates:[D[0]],q:{}},asn:[{id:'a',mat:'M',qty:5,date:'2031-01-01'}]},()=>calc());ok('ASN fora do horizonte não soma e é contado',c.rows[0].a[0]===0&&c.asnOut===1);
+ ok('Números BR: R$ 6.862,00=6862; 1.234,56; 1.234=1234; 0,5',pNum('R$ 6.862,00')===6862&&pNum('1.234,56')===1234.56&&pNum('1.234')===1234&&pNum('0,5')===0.5&&isNaN(pNum('abc')));
+ let p=withS({},()=>parseTab('po','Data Emissao\tNumero\tMATERIAL\tDescricao\tQuantidade\tQtd.Entregue\tEm aberto\tUnidade\tPrc Unitario\tVlr.Total\tDesc. Fornec\tFornecedor\n22/10/2024\t000004\tSERV_7.13\tX\t1\t1\t0\tUN\tR$ 6.862,00\tR$ 6.862,00\tEMOPS\t000692\n\n'));ok('Pedido: zeros à esquerda, valores BR, linha vazia ignorada',p.valid.length===1&&p.valid[0].num==='000004'&&p.valid[0].forn==='000692'&&p.valid[0].tot===6862&&p.ign.length===1);
+ p=parseTab('stock','Rótulos de Linha\tLinha\tSoma de Quantidade\nA1\tx\t10\nA1\tx\t5\nB\tx\t-1\nTotal Geral\t\t99');ok('Estoque: duplicado somado, negativo inválido, Total Geral ignorado',p.valid.length===1&&p.valid[0].qty===15&&p.inv.length===1&&p.ign.length===1&&p.w.length===1);
+ p=parsePlan('Modelo\t30/dez\t02/jan\nN150\t1\t2',2026);ok('Plano: virada de ano 30/12/2026 → 02/01/2027',p.dates.join()==='2026-12-30,2027-01-02'&&p.valid.length===2);
+ ok('Chaves de mesclagem: BOM Código+MODEL; PO Número+MATERIAL; Estoque Material',E.bom.k({cod:'A',model:'B'})==='A|B'&&E.po.k({num:'1',mat:'M'})==='1|M'&&E.stock.k({mat:'Z'})==='Z');
+ const g=groups(['2030-01-01','2030-01-02','2030-01-08','2030-02-01'],'w'),gm=groups(['2030-01-01','2030-01-31','2030-02-01'],'m');ok('Agrupamento semanal/mensal',g.length===3&&g[0].i.length===2&&gm.length===2);
+ return T}
+function testView(){const t=tests();return `<p><b class="${t.every(x=>x[1])?'ok':'neg'}">${t.filter(x=>x[1]).length}/${t.length} testes passaram</b></p>`+t.map(([n,o])=>`<div class="${o?'ok':'neg'}">${o?'✔':'✘'} ${esc(n)}</div>`).join('')}
+/* ===== shell ===== */
+const TABS=[['mrp','MRP'],['bom','BOM'],['plan','Plano de produção'],['po','Pedidos de compra'],['lt','Leadtime fornecedores'],['asn','Avisos de embarque'],['stock','Estoque'],['test','Testes']];
+function render(){$('#nav').innerHTML=TABS.map(([k,l])=>`<button class="${st.tab===k?'on':''}" onclick="st.tab='${k}';render()">${l}</button>`).join('');
+ const t=st.tab;$('#app').className=t==='mrp'?'mrp':'';$('#app').innerHTML=t==='mrp'?mrpView():t==='plan'?planView():t==='lt'?ltView():t==='test'?testView():envView(t);if(t==='mrp')drawMrp()}
+render();
+</script></body></html>
